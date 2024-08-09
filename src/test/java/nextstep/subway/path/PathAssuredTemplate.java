@@ -2,11 +2,12 @@ package nextstep.subway.path;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import nextstep.subway.path.domain.PathType;
 import org.springframework.http.MediaType;
 
 public class PathAssuredTemplate {
 
-    public static Response searchShortestPath(Long sourceStationId, Long targetStationId) {
+    public static Response searchShortestPath(Long sourceStationId, Long targetStationId, PathType pathType) {
 
         return RestAssured
                 .given().log().all()
@@ -15,6 +16,7 @@ public class PathAssuredTemplate {
                 .when()
                 .queryParam("source", sourceStationId)
                 .queryParam("target", targetStationId)
+                .queryParam("type", pathType)
                 .get("/paths");
     }
 }

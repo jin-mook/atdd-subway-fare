@@ -5,6 +5,7 @@ import io.restassured.response.Response;
 import nextstep.subway.common.SubwayErrorMessage;
 import nextstep.subway.line.dto.LineRequest;
 import nextstep.subway.line.dto.SectionRequest;
+import nextstep.subway.path.domain.PathType;
 import nextstep.subway.station.StationFixtures;
 import nextstep.utils.AcceptanceTest;
 import org.assertj.core.api.Assertions;
@@ -52,7 +53,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     void shortest() {
         // given
         // when
-        ExtractableResponse<Response> result = PathAssuredTemplate.searchShortestPath(논현역_id, 양재역_id)
+        ExtractableResponse<Response> result = PathAssuredTemplate.searchShortestPath(논현역_id, 양재역_id, PathType.DISTANCE)
                 .then().log().all()
                 .extract();
 
@@ -80,7 +81,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         // given
         long 사당역_id = createStationWithId(StationFixtures.사당역.getName());
         // when
-        ExtractableResponse<Response> result = PathAssuredTemplate.searchShortestPath(사당역_id, 양재역_id)
+        ExtractableResponse<Response> result = PathAssuredTemplate.searchShortestPath(사당역_id, 양재역_id, PathType.DISTANCE)
                 .then().log().all()
                 .extract();
         // then
@@ -98,7 +99,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     void noStation() {
         // given
         // when
-        ExtractableResponse<Response> result = PathAssuredTemplate.searchShortestPath(Long.MAX_VALUE, 양재역_id)
+        ExtractableResponse<Response> result = PathAssuredTemplate.searchShortestPath(Long.MAX_VALUE, 양재역_id, PathType.DISTANCE)
                 .then().log().all()
                 .extract();
         // then
