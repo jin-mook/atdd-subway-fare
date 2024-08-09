@@ -12,6 +12,7 @@ public enum SubwayErrorMessage {
     ILLEGAL_DISTANCE_VALUE("거리 간격이 0 이하일 수 없습니다."),
     ILLEGAL_DURATION_VALUE("소요 시간이 0 이하일 수 없습니다."),
     LARGE_DISTANCE_THAN_CURRENT_SECTION("기존 구간의 거리보다 클 수 없습니다."),
+    LARGE_DURATION_THAN_CURRENT_SECTION("기존 구간의 소요시간 보다 클 수 없습니다."),
     CANNOT_ADD_STATION("새로운 역을 추가할 수 없습니다."),
     NOT_CONNECTED_STATION("연결되어 있는 역이 아닙니다.");
 

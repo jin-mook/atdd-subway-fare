@@ -44,6 +44,7 @@ public class Sections {
                 newSection.setOrderFrontSection(section);
 
                 section.decreaseDistance(newSection.getDistance());
+                section.decreaseDuration(newSection.getDuration());
                 section.changeUpStation(newSection.getDownStation());
             } else {
                 Section lastSection = getLastSection();
@@ -58,6 +59,7 @@ public class Sections {
                 newSection.setOrderBehindSection(section);
 
                 section.decreaseDistance(newSection.getDistance());
+                section.decreaseDuration(newSection.getDuration());
                 section.changeDownStation(newSection.getUpStation());
             } else {
                 Section firstSection = getFirstSection();

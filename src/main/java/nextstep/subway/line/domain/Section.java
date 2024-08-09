@@ -52,6 +52,7 @@ public class Section {
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
     }
 
     public static Section firstSection(Station upStation, Station downStation, Long distance, Long duration) {
@@ -83,6 +84,14 @@ public class Section {
         }
 
         this.distance -= distance;
+    }
+
+    public void decreaseDuration(Long duration) {
+        if (this.duration <= duration) {
+            throw new IllegalDurationValueException(SubwayErrorMessage.LARGE_DURATION_THAN_CURRENT_SECTION);
+        }
+
+        this.duration -= duration;
     }
 
     public void changeUpStation(Station station) {

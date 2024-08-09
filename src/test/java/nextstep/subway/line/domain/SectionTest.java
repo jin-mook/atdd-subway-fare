@@ -56,4 +56,16 @@ class SectionTest {
                 .isInstanceOf(IllegalDistanceValueException.class)
                 .hasMessage(SubwayErrorMessage.LARGE_DISTANCE_THAN_CURRENT_SECTION.getMessage());
     }
+
+    @ParameterizedTest(name = "기존 Section 의 소요 시간 이상으로 소요 시간을 줄일 수 없습니다.")
+    @ValueSource(longs = {10, 11})
+    void decreaseDurationBig(long duration) {
+        // given
+        Section section = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 5L, 10L);
+        // when
+        // then
+        Assertions.assertThatThrownBy(() -> section.decreaseDuration(duration))
+                .isInstanceOf(IllegalDurationValueException.class)
+                .hasMessage(SubwayErrorMessage.LARGE_DURATION_THAN_CURRENT_SECTION.getMessage());
+    }
 }

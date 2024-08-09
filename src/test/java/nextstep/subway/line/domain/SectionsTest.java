@@ -151,7 +151,7 @@ class SectionsTest {
         Assertions.assertThat(secondSection.getDistance()).isEqualTo(5L);
         Assertions.assertThat(secondSection.getDuration()).isEqualTo(10L);
         Assertions.assertThat(firstSection.getDistance()).isEqualTo(7L);
-        Assertions.assertThat(firstSection.getDuration()).isEqualTo(4L);
+        Assertions.assertThat(firstSection.getDuration()).isEqualTo(6L);
 
         Assertions.assertThat(firstSection.getUpStation()).isEqualTo(StationFixtures.THIRD_UP_STATION);
         Assertions.assertThat(secondSection.getUpStation()).isEqualTo(StationFixtures.SECOND_UP_STATION);
