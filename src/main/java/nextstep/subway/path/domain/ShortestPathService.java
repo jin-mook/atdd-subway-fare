@@ -1,7 +1,7 @@
 package nextstep.subway.path.domain;
 
 import nextstep.subway.line.domain.Section;
-import nextstep.subway.station.Station;
+import nextstep.subway.path.dto.SearchPathInfo;
 
 import java.util.List;
 
@@ -9,5 +9,5 @@ public interface ShortestPathService {
 
 //    Path findShortestPath(Long sourceStationId, Long targetStationId);
 
-    Path findShortestPath(List<Section> sections, Station sourceStation, Station targetStation);
+    Path findShortestPath(List<Section> sections, SearchPathInfo searchPathInfo);
 }

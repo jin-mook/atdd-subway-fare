@@ -7,7 +7,9 @@ import nextstep.subway.line.domain.Section;
 import nextstep.subway.line.dto.LineRequest;
 import nextstep.subway.line.dto.SectionRequest;
 import nextstep.subway.path.domain.Path;
+import nextstep.subway.path.domain.PathType;
 import nextstep.subway.path.domain.ShortestPathService;
+import nextstep.subway.path.dto.SearchPathInfo;
 import nextstep.subway.station.Station;
 import nextstep.subway.station.StationFixtures;
 import nextstep.subway.station.StationRepository;
@@ -85,7 +87,7 @@ class JgraphtShortestPathServiceTest extends AcceptanceTest {
 
         // when
         // then
-        Assertions.assertThatThrownBy(() -> shortestPathService.findShortestPath(sections, sourceStation, targetStation))
+        Assertions.assertThatThrownBy(() -> shortestPathService.findShortestPath(sections, new SearchPathInfo(sourceStation, targetStation, PathType.DISTANCE)))
                 .isInstanceOf(NotConnectedStationException.class)
                 .hasMessage(SubwayErrorMessage.NOT_CONNECTED_STATION.getMessage());
     }
@@ -99,7 +101,7 @@ class JgraphtShortestPathServiceTest extends AcceptanceTest {
         Station targetStation = stationRepository.findById(양재역_id).get();
 
 
-        Path path = shortestPathService.findShortestPath(sections, sourceStation, targetStation);
+        Path path = shortestPathService.findShortestPath(sections, new SearchPathInfo(sourceStation, targetStation, PathType.DISTANCE));
         List<Station> stationList = path.getStations();
 
         // then

@@ -92,7 +92,7 @@ public class PathStepDef implements En {
         });
 
         Then("논현역부터 양재역까지의 소요 시간이 가장 빠른 길의 역들과 총 거리, 소요 시간을 응답받습니다.", () -> {
-            Assertions.assertThat(response.jsonPath().getList("stations")).hasSize(4)
+            Assertions.assertThat(response.jsonPath().getList("stations")).hasSize(3)
                     .extracting("id", "name")
                     .contains(
                             Tuple.tuple((int) 논현역_id, StationFixtures.논현역.getName()),
