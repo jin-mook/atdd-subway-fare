@@ -43,12 +43,12 @@ public class PathStepDef implements En {
             addSection(삼호선_id, new SectionRequest(교대역_id, 양재역_id, 3L));
         });
 
-        When("source 에서 sink 역으로 갈 수 있는 길을 조회합니다.", () -> {
+        When("논현역에서 양재역으로 갈 수 있는 길을 조회합니다.", () -> {
             this.response = searchShortestPath(논현역_id, 양재역_id)
                     .then().log().all().extract();
         });
 
-        Then("source 부터 sink 까지의 가장 빠른 길의 역들과 총 거리를 응답받습니다.", () -> {
+        Then("논현역부터 양재역까지의 가장 빠른 길의 역들과 총 거리를 응답받습니다.", () -> {
             Assertions.assertThat(response.jsonPath().getList("stations")).hasSize(4)
                     .extracting("id", "name")
                     .contains(
