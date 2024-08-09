@@ -27,6 +27,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     private static final String LINE_NAME = "신분당선";
     private static final String COLOR = "bg-red-600";
     private static final long DISTANCE = 10;
+    private static final long DURATION = 5;
 
     private static final long UP_STATION_ID = 1;
     private static final long DOWN_STATION_ID = 2;
@@ -42,7 +43,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         // given
 
         // when
-        LineRequest lineRequest = new LineRequest(LINE_NAME, COLOR, UP_STATION_ID, DOWN_STATION_ID, DISTANCE);
+        LineRequest lineRequest = new LineRequest(LINE_NAME, COLOR, UP_STATION_ID, DOWN_STATION_ID, DISTANCE, DURATION);
 
         ExtractableResponse<Response> result = LineAssuredTemplate.createLine(lineRequest)
                 .then()
@@ -69,8 +70,8 @@ public class LineAcceptanceTest extends AcceptanceTest {
         String newStation = "새로운지하쳘역";
         long newStationId = StationAssuredTemplate.createStationWithId(newStation);
 
-        LineAssuredTemplate.createLine(new LineRequest("신분당선", "bg-red-600", UP_STATION_ID, DOWN_STATION_ID, DISTANCE));
-        LineAssuredTemplate.createLine(new LineRequest("2호선", "bg-green-600", UP_STATION_ID, newStationId, DISTANCE));
+        LineAssuredTemplate.createLine(new LineRequest("신분당선", "bg-red-600", UP_STATION_ID, DOWN_STATION_ID, DISTANCE, DURATION));
+        LineAssuredTemplate.createLine(new LineRequest("2호선", "bg-green-600", UP_STATION_ID, newStationId, DISTANCE, DURATION));
 
         // when
         ExtractableResponse<Response> result = LineAssuredTemplate.searchAllLine()
@@ -108,7 +109,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @DisplayName("특정 지하철 노선을 조회합니다.")
     void findLine() {
         // given
-        LineRequest lineRequest = new LineRequest(LINE_NAME, COLOR, UP_STATION_ID, DOWN_STATION_ID, DISTANCE);
+        LineRequest lineRequest = new LineRequest(LINE_NAME, COLOR, UP_STATION_ID, DOWN_STATION_ID, DISTANCE, DURATION);
         long lineId = LineAssuredTemplate.createLine(lineRequest)
                 .then().extract().jsonPath().getLong("id");
 
@@ -135,7 +136,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @DisplayName("지하철 노선의 이름과 색 수정 요청을 하면 정상 응답을 받습니다. 이후 수정된 정보로 전달을 받습니다.")
     void updateLine() {
         // given
-        LineRequest lineRequest = new LineRequest(LINE_NAME, COLOR, UP_STATION_ID, DOWN_STATION_ID, DISTANCE);
+        LineRequest lineRequest = new LineRequest(LINE_NAME, COLOR, UP_STATION_ID, DOWN_STATION_ID, DISTANCE, DURATION);
         long lineId = LineAssuredTemplate.createLine(lineRequest)
                 .then().extract().jsonPath().getLong("id");
 
@@ -172,7 +173,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @DisplayName("지하철 노선 삭제 요청을 보내면 정상 응답을 전달받습니다. 이후 해당 노선은 보이지 않습니다.")
     void deleteLine() {
         // given
-        LineRequest lineRequest = new LineRequest(LINE_NAME, COLOR, UP_STATION_ID, DOWN_STATION_ID, DISTANCE);
+        LineRequest lineRequest = new LineRequest(LINE_NAME, COLOR, UP_STATION_ID, DOWN_STATION_ID, DISTANCE, DURATION);
         long lineId = LineAssuredTemplate.createLine(lineRequest)
                 .then().extract().jsonPath().getLong("id");
 

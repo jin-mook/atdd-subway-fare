@@ -34,7 +34,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         this.강남역_id = createStationWithId(StationFixtures.FIRST_UP_STATION.getName());
         this.역삼역_id = createStationWithId(StationFixtures.FIRST_DOWN_STATION.getName());
         this.선릉역_id =  createStationWithId(StationFixtures.SECOND_UP_STATION.getName());
-        this.이호선_id = createLine(new LineRequest("신분당선", "red", 강남역_id, 역삼역_id, 10L))
+        this.이호선_id = createLine(new LineRequest("신분당선", "red", 강남역_id, 역삼역_id, 10L, 10L))
                 .then().extract().jsonPath().getLong("id");
     }
 
@@ -47,14 +47,14 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @Test
     void noExistStation() {
         // given
-        SectionAssuredTemplate.addSection(이호선_id, new SectionRequest(역삼역_id, 선릉역_id, 20L));
+        SectionAssuredTemplate.addSection(이호선_id, new SectionRequest(역삼역_id, 선릉역_id, 20L, 15L));
 
         long newUpStation = createStationWithId(StationFixtures.THIRD_UP_STATION.getName());
 
         long newDownStation = createStationWithId(StationFixtures.THIRD_DOWN_STATION.getName());
 
         // when
-        ExtractableResponse<Response> result = SectionAssuredTemplate.addSection(이호선_id, new SectionRequest(newUpStation, newDownStation, 30L))
+        ExtractableResponse<Response> result = SectionAssuredTemplate.addSection(이호선_id, new SectionRequest(newUpStation, newDownStation, 30L, 10L))
                 .then().extract();
 
         // then
@@ -75,7 +75,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         long newDownStationId = createStationWithId(StationFixtures.SECOND_DOWN_STATION.getName());
 
         // when
-        SectionRequest sectionRequest = new SectionRequest(newUpStationId, newDownStationId, 10L);
+        SectionRequest sectionRequest = new SectionRequest(newUpStationId, newDownStationId, 10L, 20L);
         ExtractableResponse<Response> result = SectionAssuredTemplate.addSection(이호선_id, sectionRequest)
                 .then().log().all().extract();
 
@@ -95,7 +95,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         // given
 
         // when
-        SectionRequest sectionRequest = new SectionRequest(역삼역_id, 강남역_id, 10L);
+        SectionRequest sectionRequest = new SectionRequest(역삼역_id, 강남역_id, 10L, 20L);
         ExtractableResponse<Response> result = SectionAssuredTemplate.addSection(이호선_id, sectionRequest)
                 .then().log().all().extract();
 
@@ -113,17 +113,17 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @Test
     void addSection() {
         // given
-        SectionAssuredTemplate.addSection(이호선_id, new SectionRequest(역삼역_id, 선릉역_id, 10L));
+        SectionAssuredTemplate.addSection(이호선_id, new SectionRequest(역삼역_id, 선릉역_id, 10L, 20L));
         long newDownStationId = createStationWithId(StationFixtures.SECOND_DOWN_STATION.getName());
 
         long newUpStationId = createStationWithId(StationFixtures.THIRD_UP_STATION.getName());
 
         // when
         // 1. upStation 기준으로 구간 추가
-        SectionAssuredTemplate.addSection(이호선_id, new SectionRequest(역삼역_id, newDownStationId, 3L));
+        SectionAssuredTemplate.addSection(이호선_id, new SectionRequest(역삼역_id, newDownStationId, 3L, 15L));
 
         // 2. downStation 기준으로 구간 추가
-        SectionAssuredTemplate.addSection(이호선_id, new SectionRequest(newUpStationId, 강남역_id, 20L));
+        SectionAssuredTemplate.addSection(이호선_id, new SectionRequest(newUpStationId, 강남역_id, 20L, 10L));
 
         // then
         ExtractableResponse<Response> result = searchOneLine(이호선_id)
@@ -169,7 +169,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         // given
         long newDownStationId = createStationWithId(StationFixtures.SECOND_DOWN_STATION.getName());
 
-        SectionRequest sectionRequest = new SectionRequest(역삼역_id, newDownStationId, 10L);
+        SectionRequest sectionRequest = new SectionRequest(역삼역_id, newDownStationId, 10L, 20L);
         SectionAssuredTemplate.addSection(이호선_id, sectionRequest);
 
         // when
@@ -200,7 +200,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
         // given
         long newDownStationId = createStationWithId(StationFixtures.SECOND_DOWN_STATION.getName());
 
-        SectionRequest sectionRequest = new SectionRequest(역삼역_id, newDownStationId, 10L);
+        SectionRequest sectionRequest = new SectionRequest(역삼역_id, newDownStationId, 10L, 20L);
         SectionAssuredTemplate.addSection(이호선_id, sectionRequest);
 
         // when

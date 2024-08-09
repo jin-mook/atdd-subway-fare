@@ -3,7 +3,6 @@ package nextstep.subway.unit;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineRepository;
 import nextstep.subway.line.domain.Section;
-import nextstep.subway.line.dto.LineResponse;
 import nextstep.subway.line.dto.SectionRequest;
 import nextstep.subway.line.service.LineService;
 import nextstep.subway.station.Station;
@@ -33,13 +32,13 @@ public class LineServiceTest {
         Station upStation = stationRepository.save(StationFixtures.FIRST_UP_STATION);
         Station downStation = stationRepository.save(StationFixtures.FIRST_DOWN_STATION);
         stationRepository.save(StationFixtures.SECOND_UP_STATION);
-        Section section = Section.firstSection(upStation, downStation, 10L);
+        Section section = Section.firstSection(upStation, downStation, 10L, 10L);
         Line line = new Line("2호선", "green", section);
         Line savedLine = lineRepository.save(line);
 
         // when
         // lineService.addSection 호출
-        LineResponse lineResponse = lineService.addSection(savedLine.getId(), new SectionRequest(StationFixtures.FIRST_DOWN_STATION.getId(), StationFixtures.SECOND_UP_STATION.getId(), 20L));
+        lineService.addSection(savedLine.getId(), new SectionRequest(StationFixtures.FIRST_DOWN_STATION.getId(), StationFixtures.SECOND_UP_STATION.getId(), 20L, 20L));
 
         // then
         // line.getSections 메서드를 통해 검증

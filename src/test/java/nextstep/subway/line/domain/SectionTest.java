@@ -2,6 +2,7 @@ package nextstep.subway.line.domain;
 
 import nextstep.subway.common.SubwayErrorMessage;
 import nextstep.subway.exception.IllegalDistanceValueException;
+import nextstep.subway.exception.IllegalDurationValueException;
 import nextstep.subway.exception.NotSameUpAndDownStationException;
 import nextstep.subway.station.StationFixtures;
 import org.assertj.core.api.Assertions;
@@ -18,9 +19,20 @@ class SectionTest {
         // given
         // when
         // then
-        Assertions.assertThatThrownBy(() -> Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 0L))
+        Assertions.assertThatThrownBy(() -> Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 0L, 10L))
                 .isInstanceOf(IllegalDistanceValueException.class)
                 .hasMessage(SubwayErrorMessage.ILLEGAL_DISTANCE_VALUE.getMessage());
+    }
+
+    @DisplayName("구간의 소요 시간은 0이하 값이 올 수 없습니다.")
+    @Test
+    void zeroDuration() {
+        // given
+        // when
+        // then
+        Assertions.assertThatThrownBy(() -> Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L, 0L))
+                .isInstanceOf(IllegalDurationValueException.class)
+                .hasMessage(SubwayErrorMessage.ILLEGAL_DURATION_VALUE.getMessage());
     }
 
     @DisplayName("상행역과 하행역은 같으면 안됩니다.")
@@ -29,7 +41,7 @@ class SectionTest {
         // given
         // when
         // then
-        Assertions.assertThatThrownBy(() -> Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_UP_STATION, 10L))
+        Assertions.assertThatThrownBy(() -> Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_UP_STATION, 10L, 10L))
                 .isInstanceOf(NotSameUpAndDownStationException.class);
     }
 
@@ -37,7 +49,7 @@ class SectionTest {
     @ValueSource(longs = {5, 6})
     void decreaseDistanceBig(long distance) {
         // given
-        Section section = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 5L);
+        Section section = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 5L, 10L);
         // when
         // then
         Assertions.assertThatThrownBy(() -> section.decreaseDistance(distance))

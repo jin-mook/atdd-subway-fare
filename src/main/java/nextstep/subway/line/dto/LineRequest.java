@@ -26,11 +26,15 @@ public class LineRequest {
     @NotNull
     private long distance;
 
-    public LineRequest(String name, String color, long upStationId, long downStationId, long distance) {
+    @NotNull
+    private long duration;
+
+    public LineRequest(String name, String color, long upStationId, long downStationId, long distance, long duration) {
         this.name = name;
         this.color = color;
         this.upStationId = upStationId;
         this.downStationId = downStationId;
         this.distance = distance;
+        this.duration = duration;
     }
 }

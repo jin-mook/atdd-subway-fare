@@ -25,11 +25,11 @@ class SectionsTest {
     @Test
     void noExist() {
         // given
-        Section section = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L);
+        Section section = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L, 10L);
         sections.addSection(section);
 
         // when
-        Section newSection = Section.firstSection(StationFixtures.SECOND_UP_STATION, StationFixtures.SECOND_DOWN_STATION, 10L);
+        Section newSection = Section.firstSection(StationFixtures.SECOND_UP_STATION, StationFixtures.SECOND_DOWN_STATION, 10L, 5L);
         // then
         Assertions.assertThatThrownBy(() -> sections.addSection(newSection))
                 .isInstanceOf(NoStationException.class)
@@ -40,11 +40,11 @@ class SectionsTest {
     @DisplayName("새로운 구역을 추가할 때 새로운 구역의 상행역과 하행역이 둘다 기존 구역에 존재한다면 에러가 발생합니다.")
     void existBoth() {
         // given
-        Section section = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L);
+        Section section = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L, 10L);
         sections.addSection(section);
 
         // when
-        Section newSection = Section.firstSection(StationFixtures.FIRST_DOWN_STATION, StationFixtures.FIRST_UP_STATION, 10L);
+        Section newSection = Section.firstSection(StationFixtures.FIRST_DOWN_STATION, StationFixtures.FIRST_UP_STATION, 10L, 5L);
         // then
         Assertions.assertThatThrownBy(() -> sections.addSection(newSection))
                 .isInstanceOf(AlreadyHasUpAndDownStationException.class)
@@ -56,10 +56,10 @@ class SectionsTest {
     @DisplayName("upStation 기준으로 새로운 구역을 추가할 때 새로운 구역의 길이가 기존 길이보다 크거나 같으면 에러가 발생합니다.")
     void largeDistanceUpStation() {
         // given
-        Section section = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L);
+        Section section = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L, 10L);
         sections.addSection(section);
         // when
-        Section newSection = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.SECOND_DOWN_STATION, 10L);
+        Section newSection = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.SECOND_DOWN_STATION, 10L, 5L);
         // then
         Assertions.assertThatThrownBy(() -> sections.addSection(newSection))
                 .isInstanceOf(IllegalDistanceValueException.class)
@@ -69,10 +69,10 @@ class SectionsTest {
     @Test
     @DisplayName("downStation 기준으로 새로운 구역을 추가할 때 새로운 구역의 길이가 기존 길이보다 크거나 같으면 에러가 발생합니다.")
     void largeDistanceDownStation() {
-        Section section = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L);
+        Section section = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L, 10L);
         sections.addSection(section);
         // when
-        Section newSection = Section.firstSection(StationFixtures.SECOND_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L);
+        Section newSection = Section.firstSection(StationFixtures.SECOND_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L, 5L);
         // then
         Assertions.assertThatThrownBy(() -> sections.addSection(newSection))
                 .isInstanceOf(IllegalDistanceValueException.class)
@@ -83,10 +83,10 @@ class SectionsTest {
     @Test
     void noSameStation() {
         // given
-        Section section = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L);
+        Section section = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L, 10L);
         sections.addSection(section);
 
-        Section newSection = Section.firstSection(StationFixtures.SECOND_UP_STATION, StationFixtures.SECOND_DOWN_STATION, 10L);
+        Section newSection = Section.firstSection(StationFixtures.SECOND_UP_STATION, StationFixtures.SECOND_DOWN_STATION, 10L, 10L);
         // when
         // then
         Assertions.assertThatThrownBy(() -> sections.addSection(newSection))
@@ -97,16 +97,16 @@ class SectionsTest {
     @Test
     void hasDownStation() {
         // given
-        Section firstSection = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L);
+        Section firstSection = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L, 10L);
 
         sections.addSection(firstSection);
 
-        Section secondSection = Section.firstSection(StationFixtures.FIRST_DOWN_STATION, StationFixtures.SECOND_DOWN_STATION, 10L);
+        Section secondSection = Section.firstSection(StationFixtures.FIRST_DOWN_STATION, StationFixtures.SECOND_DOWN_STATION, 10L, 5L);
 
         sections.addSection(secondSection);
 
         // when
-        Section thirdSection = Section.firstSection(StationFixtures.SECOND_DOWN_STATION, StationFixtures.FIRST_UP_STATION, 10L);
+        Section thirdSection = Section.firstSection(StationFixtures.SECOND_DOWN_STATION, StationFixtures.FIRST_UP_STATION, 10L, 15L);
 
         // then
         Assertions.assertThatThrownBy(() -> sections.addSection(thirdSection))
@@ -117,7 +117,7 @@ class SectionsTest {
     @Test
     void sectionEmpty() {
         // given
-        Section section = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L);
+        Section section = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L, 10L);
         // when
         sections.addSection(section);
 
@@ -129,27 +129,29 @@ class SectionsTest {
     @DisplayName("새로운 구간의 상행역이 기존 노선에 존재하는 역 조건을 만족할 때 신규 구간을 추가합니다.")
     void addWithUpStation() {
         // given
-        Section firstSection = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L);
+        Section firstSection = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L, 10L);
         sections.addSection(firstSection);
 
         // when
         // 1. 가장 뒤에 추가하는 경우
-        Section secondSection = Section.firstSection(StationFixtures.FIRST_DOWN_STATION, StationFixtures.SECOND_DOWN_STATION, 10L);
+        Section secondSection = Section.firstSection(StationFixtures.FIRST_DOWN_STATION, StationFixtures.SECOND_DOWN_STATION, 10L, 15L);
         sections.addSection(secondSection);
 
         // 2. 중간에 추가하는 경우
-        Section targetSection = Section.firstSection(StationFixtures.FIRST_DOWN_STATION, StationFixtures.SECOND_UP_STATION, 5L);
+        Section targetSection = Section.firstSection(StationFixtures.FIRST_DOWN_STATION, StationFixtures.SECOND_UP_STATION, 5L, 5L);
         sections.addSection(targetSection);
 
         // 3. 가장 앞에 추가하는 경우
-        Section secondTargetSection = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.THIRD_UP_STATION, 3L);
+        Section secondTargetSection = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.THIRD_UP_STATION, 3L, 4L);
         sections.addSection(secondTargetSection);
 
         // then
         Assertions.assertThat(sections.getSections()).hasSize(4)
                 .containsExactly(secondTargetSection, firstSection, targetSection, secondSection);
         Assertions.assertThat(secondSection.getDistance()).isEqualTo(5L);
+        Assertions.assertThat(secondSection.getDuration()).isEqualTo(10L);
         Assertions.assertThat(firstSection.getDistance()).isEqualTo(7L);
+        Assertions.assertThat(firstSection.getDuration()).isEqualTo(4L);
 
         Assertions.assertThat(firstSection.getUpStation()).isEqualTo(StationFixtures.THIRD_UP_STATION);
         Assertions.assertThat(secondSection.getUpStation()).isEqualTo(StationFixtures.SECOND_UP_STATION);
@@ -159,27 +161,29 @@ class SectionsTest {
     @DisplayName("새로운 구간의 하행역이 기존 노선에 존재하는 역 조건을 만족할 때 신규 구간을 추가합니다.")
     void addWithDownStation() {
         // given
-        Section firstSection = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L);
+        Section firstSection = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L, 10L);
         sections.addSection(firstSection);
 
         // when
         // 1. 가장 앞에 추가하는 경우
-        Section secondSection = Section.firstSection(StationFixtures.SECOND_UP_STATION, StationFixtures.FIRST_UP_STATION, 10L);
+        Section secondSection = Section.firstSection(StationFixtures.SECOND_UP_STATION, StationFixtures.FIRST_UP_STATION, 10L, 10L);
         sections.addSection(secondSection);
 
         // 2. 중간에 추가하는 경우
-        Section thirdSection = Section.firstSection(StationFixtures.THIRD_UP_STATION, StationFixtures.FIRST_UP_STATION, 3L);
+        Section thirdSection = Section.firstSection(StationFixtures.THIRD_UP_STATION, StationFixtures.FIRST_UP_STATION, 3L, 4L);
         sections.addSection(thirdSection);
 
         // 3. 가장 마지막에 추가하는 경우
-        Section targetSection = Section.firstSection(StationFixtures.THIRD_DOWN_STATION, StationFixtures.FIRST_DOWN_STATION, 5L);
+        Section targetSection = Section.firstSection(StationFixtures.THIRD_DOWN_STATION, StationFixtures.FIRST_DOWN_STATION, 5L, 3L);
         sections.addSection(targetSection);
 
         // then
         Assertions.assertThat(sections.getSections()).hasSize(4)
                 .contains(secondSection, thirdSection, firstSection, targetSection);
         Assertions.assertThat(secondSection.getDistance()).isEqualTo(7L);
+        Assertions.assertThat(secondSection.getDuration()).isEqualTo(6L);
         Assertions.assertThat(firstSection.getDistance()).isEqualTo(5L);
+        Assertions.assertThat(firstSection.getDuration()).isEqualTo(7L);
 
         Assertions.assertThat(secondSection.getDownStation()).isEqualTo(StationFixtures.THIRD_UP_STATION);
         Assertions.assertThat(firstSection.getDownStation()).isEqualTo(StationFixtures.THIRD_DOWN_STATION);
@@ -198,10 +202,10 @@ class SectionsTest {
     }
 
     @Test
-    @DisplayName("구역이 한 개만 존재한다면 에러가 발생합니다.")
+    @DisplayName("구역이 한 개만 존재한다면 역 삭제할 때 에러가 발생합니다.")
     void oneSection() {
         // given
-        Section section = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L);
+        Section section = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L, 10L);
         sections.addSection(section);
         // when
         // then
@@ -214,9 +218,9 @@ class SectionsTest {
     @Test
     void upStationDelete() {
         // given
-        Section firstSection = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L);
+        Section firstSection = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L, 10L);
         sections.addSection(firstSection);
-        Section secondSection = Section.firstSection(StationFixtures.FIRST_DOWN_STATION, StationFixtures.SECOND_UP_STATION, 20L);
+        Section secondSection = Section.firstSection(StationFixtures.FIRST_DOWN_STATION, StationFixtures.SECOND_UP_STATION, 20L, 20L);
         sections.addSection(secondSection);
         // when
         sections.deleteSection(StationFixtures.FIRST_UP_STATION);
@@ -230,9 +234,9 @@ class SectionsTest {
     @DisplayName("전달받은 역 정보가 마지막 구간에 존재하는 경우 삭제합니다.")
     void noLastStation() {
         // given
-        Section firstSection = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L);
+        Section firstSection = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L, 10L);
         sections.addSection(firstSection);
-        Section secondSection = Section.firstSection(StationFixtures.FIRST_DOWN_STATION, StationFixtures.SECOND_UP_STATION, 20L);
+        Section secondSection = Section.firstSection(StationFixtures.FIRST_DOWN_STATION, StationFixtures.SECOND_UP_STATION, 20L, 20L);
         sections.addSection(secondSection);
         // when
         sections.deleteSection(StationFixtures.SECOND_UP_STATION);
@@ -246,17 +250,17 @@ class SectionsTest {
     @DisplayName("전달받은 역 정보가 2개 이상의 구간에 존재하는 경우 정상적으로 역을 삭제합니다.")
     void targetSection() {
         // given
-        Section firstSection = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L);
+        Section firstSection = Section.firstSection(StationFixtures.FIRST_UP_STATION, StationFixtures.FIRST_DOWN_STATION, 10L, 15L);
         sections.addSection(firstSection);
-        Section secondSection = Section.firstSection(StationFixtures.FIRST_DOWN_STATION, StationFixtures.SECOND_UP_STATION, 20L);
+        Section secondSection = Section.firstSection(StationFixtures.FIRST_DOWN_STATION, StationFixtures.SECOND_UP_STATION, 20L, 25L);
         sections.addSection(secondSection);
         // when
         sections.deleteSection(StationFixtures.FIRST_DOWN_STATION);
         // then
         Assertions.assertThat(sections.getSections()).hasSize(1)
-                .extracting("lineOrder", "upStation", "downStation", "distance")
+                .extracting("lineOrder", "upStation", "downStation", "distance", "duration")
                 .contains(
-                        Tuple.tuple(1, StationFixtures.FIRST_UP_STATION, StationFixtures.SECOND_UP_STATION, 30L)
+                        Tuple.tuple(1, StationFixtures.FIRST_UP_STATION, StationFixtures.SECOND_UP_STATION, 30L, 40L)
                 );
     }
 }

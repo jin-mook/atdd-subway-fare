@@ -43,7 +43,7 @@ class LineTest {
         line.addSection(SectionFixtures.ADD_FIRST_SECTION);
         // when
         // then
-        Assertions.assertThatThrownBy(() -> line.addSection(Section.firstSection(StationFixtures.THIRD_UP_STATION, StationFixtures.THIRD_DOWN_STATION, 10L)))
+        Assertions.assertThatThrownBy(() -> line.addSection(Section.firstSection(StationFixtures.THIRD_UP_STATION, StationFixtures.THIRD_DOWN_STATION, 10L, 20L)))
                 .isInstanceOf(NoStationException.class)
                 .hasMessage(SubwayErrorMessage.CANNOT_ADD_STATION.getMessage());
     }

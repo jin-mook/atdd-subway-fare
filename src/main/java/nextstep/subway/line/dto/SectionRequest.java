@@ -16,10 +16,13 @@ public class SectionRequest {
     private Long downStationId;
     @NotNull
     private Long distance;
+    @NotNull
+    private Long duration;
 
-    public SectionRequest(Long upStationId, Long downStationId, Long distance) {
+    public SectionRequest(Long upStationId, Long downStationId, Long distance, Long duration) {
         this.upStationId = upStationId;
         this.downStationId = downStationId;
         this.distance = distance;
+        this.duration = duration;
     }
 }

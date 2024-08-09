@@ -48,12 +48,12 @@ class JgraphtShortestPathServiceTest extends AcceptanceTest {
         long 고속터미널역_id = createStationWithId(StationFixtures.고속터미널역.getName());
         long 교대역_id = createStationWithId(StationFixtures.교대역.getName());
 
-        long 신분당선_id = createLine(new LineRequest("신분당선", "red", 논현역_id, 강남역_id, 4L)).then().extract().jsonPath().getLong("id");
-        long 삼호선_id = createLine(new LineRequest("3호선", "orange", 논현역_id, 고속터미널역_id, 2L)).then().extract().jsonPath().getLong("id");
+        long 신분당선_id = createLine(new LineRequest("신분당선", "red", 논현역_id, 강남역_id, 4L, 10L)).then().extract().jsonPath().getLong("id");
+        long 삼호선_id = createLine(new LineRequest("3호선", "orange", 논현역_id, 고속터미널역_id, 2L, 20L)).then().extract().jsonPath().getLong("id");
 
-        addSection(신분당선_id, new SectionRequest(강남역_id, 양재역_id, 3L));
-        addSection(삼호선_id, new SectionRequest(고속터미널역_id, 교대역_id, 1L));
-        addSection(삼호선_id, new SectionRequest(교대역_id, 양재역_id, 3L));
+        addSection(신분당선_id, new SectionRequest(강남역_id, 양재역_id, 3L, 20L));
+        addSection(삼호선_id, new SectionRequest(고속터미널역_id, 교대역_id, 1L, 15L));
+        addSection(삼호선_id, new SectionRequest(교대역_id, 양재역_id, 3L, 10L));
 
         this.논현역_id = 논현역_id;
         this.양재역_id = 양재역_id;
@@ -70,7 +70,7 @@ class JgraphtShortestPathServiceTest extends AcceptanceTest {
         // given
         long 사당역_id = createStationWithId(StationFixtures.사당역.getName());
         long 방배역_id = createStationWithId(StationFixtures.방배역.getName());
-        createLine(new LineRequest("2호선", "green", 사당역_id, 방배역_id, 4L))
+        createLine(new LineRequest("2호선", "green", 사당역_id, 방배역_id, 4L, 10L))
                 .then().extract().jsonPath().getLong("id");
 
         Station sourceStation = stationRepository.findById(논현역_id).get();

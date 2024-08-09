@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import nextstep.subway.common.SubwayErrorMessage;
 import nextstep.subway.exception.IllegalDistanceValueException;
+import nextstep.subway.exception.IllegalDurationValueException;
 import nextstep.subway.exception.NotSameUpAndDownStationException;
 import nextstep.subway.station.Station;
 
@@ -33,13 +34,17 @@ public class Section {
     private Station downStation;
 
     private Long distance;
+    private Long duration;
 
-    private Section(Line line, Integer lineOrder, Station upStation, Station downStation, Long distance) {
+    private Section(Line line, Integer lineOrder, Station upStation, Station downStation, Long distance, Long duration) {
         if (upStation.equals(downStation)) {
             throw new NotSameUpAndDownStationException(SubwayErrorMessage.NOT_SAME_UP_AND_DOWN_STATION);
         }
         if (distance <= 0) {
             throw new IllegalDistanceValueException(SubwayErrorMessage.ILLEGAL_DISTANCE_VALUE);
+        }
+        if (duration <= 0) {
+            throw new IllegalDurationValueException(SubwayErrorMessage.ILLEGAL_DURATION_VALUE);
         }
 
         this.line = line;
@@ -49,8 +54,8 @@ public class Section {
         this.distance = distance;
     }
 
-    public static Section firstSection(Station upStation, Station downStation, Long distance) {
-        return new Section(null, null, upStation, downStation, distance);
+    public static Section firstSection(Station upStation, Station downStation, Long distance, Long duration) {
+        return new Section(null, null, upStation, downStation, distance, duration);
     }
 
     public static Section joinSections(Section upSection, Section downSection) {
@@ -59,7 +64,8 @@ public class Section {
                 upSection.getLineOrder(),
                 upSection.getUpStation(),
                 downSection.getDownStation(),
-                upSection.distance + downSection.distance
+                upSection.distance + downSection.distance,
+                upSection.duration + downSection.duration
         );
     }
 
