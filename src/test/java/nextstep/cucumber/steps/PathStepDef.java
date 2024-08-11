@@ -37,12 +37,12 @@ public class PathStepDef implements En {
             this.교대역_id = createStationWithId(StationFixtures.교대역.getName());
             this.사당역_id = createStationWithId(StationFixtures.사당역.getName());
 
-            long 신분당선_id = createLine(new LineRequest("신분당선", "green", 논현역_id, 강남역_id, 4L, 10L)).then().extract().jsonPath().getLong("id");
-            addSection(신분당선_id, new SectionRequest(강남역_id, 양재역_id, 3L, 20L));
+            long 신분당선_id = createLine(new LineRequest("신분당선", "green", 논현역_id, 강남역_id, 10L, 10L)).then().extract().jsonPath().getLong("id");
+            addSection(신분당선_id, new SectionRequest(강남역_id, 양재역_id, 20L, 20L));
 
-            long 삼호선_id = createLine(new LineRequest("3호선", "orange", 논현역_id, 고속터미널역_id, 2L, 20L)).then().extract().jsonPath().getLong("id");
-            addSection(삼호선_id, new SectionRequest(고속터미널역_id, 교대역_id, 1L, 15L));
-            addSection(삼호선_id, new SectionRequest(교대역_id, 양재역_id, 3L, 10L));
+            long 삼호선_id = createLine(new LineRequest("3호선", "orange", 논현역_id, 고속터미널역_id, 10L, 20L)).then().extract().jsonPath().getLong("id");
+            addSection(삼호선_id, new SectionRequest(고속터미널역_id, 교대역_id, 10L, 15L));
+            addSection(삼호선_id, new SectionRequest(교대역_id, 양재역_id, 5L, 10L));
         });
 
         When("논현역에서 양재역으로 갈 수 있는 길을 거리 기준으로 조회합니다.", () -> {
@@ -60,8 +60,12 @@ public class PathStepDef implements En {
                             Tuple.tuple((int) 양재역_id, StationFixtures.양재역.getName())
                     );
 
-            Assertions.assertThat(response.jsonPath().getLong("distance")).isEqualTo(6);
+            Assertions.assertThat(response.jsonPath().getLong("distance")).isEqualTo(25);
             Assertions.assertThat(response.jsonPath().getLong("duration")).isEqualTo(45);
+        });
+
+        And("거리 기준 지하철 경로 조회에 이용 요금도 함께 응답합니다.", () -> {
+            Assertions.assertThat(response.jsonPath().getInt("payment")).isEqualTo(1650);
         });
 
         When("서로 연결되어 있지 않은 역의 최단거리를 요청합니다.", () -> {
@@ -100,8 +104,12 @@ public class PathStepDef implements En {
                             Tuple.tuple((int) 양재역_id, StationFixtures.양재역.getName())
                     );
 
-            Assertions.assertThat(response.jsonPath().getLong("distance")).isEqualTo(7);
+            Assertions.assertThat(response.jsonPath().getLong("distance")).isEqualTo(30);
             Assertions.assertThat(response.jsonPath().getLong("duration")).isEqualTo(30);
+        });
+
+        And("소요 시간 기준 지하철 경로 조회에 이용 요금도 함께 응답합니다.", () -> {
+            Assertions.assertThat(response.jsonPath().getInt("payment")).isEqualTo(1750);
         });
     }
 }
