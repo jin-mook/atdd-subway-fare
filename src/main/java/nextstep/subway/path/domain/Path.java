@@ -1,10 +1,13 @@
 package nextstep.subway.path.domain;
 
 import lombok.Getter;
+import nextstep.subway.common.SubwayErrorMessage;
+import nextstep.subway.exception.IllegalDistanceValueException;
 import nextstep.subway.station.Station;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 public class Path {
@@ -12,6 +15,12 @@ public class Path {
     private static final long DEFAULT_DISTANCE = 10;
     private static final long OVER_FARE_DISTANCE = 50;
     private static final int DEFAULT_PAYMENT = 1250;
+
+    private static final Set<PaymentPolicy> policies = Set.of(
+            new DefaultPaymentPolicy(),
+            new UnderFifthPaymentPolicy(),
+            new OverFifthPaymentPolicy()
+    );
 
     private final List<Station> stations;
     private final long distance;
@@ -29,27 +38,10 @@ public class Path {
     }
 
     public void setPayment() {
-        int paymentTotal = DEFAULT_PAYMENT;
+        PaymentPolicy paymentPolicy = policies.stream().filter(policy -> policy.check(distance))
+                .findFirst()
+                .orElseThrow(() -> new IllegalDistanceValueException(SubwayErrorMessage.ILLEGAL_PATH_DISTANCE_VALUE));
 
-        if (distance > DEFAULT_DISTANCE && distance <= OVER_FARE_DISTANCE) {
-            paymentTotal += calculateOverTenFare(distance);
-        }
-
-        if (distance > OVER_FARE_DISTANCE) {
-            paymentTotal += calculateOverFifthFare(distance);
-        }
-        this.payment = paymentTotal;
-    }
-
-    private int calculateOverTenFare(long distance) {
-        long restDistance = distance - DEFAULT_DISTANCE;
-        int overCount = ((int) restDistance / 5) + 1;
-        return overCount * 100;
-    }
-
-    private int calculateOverFifthFare(long distance) {
-        long restDistance = distance - DEFAULT_DISTANCE;
-        int overCount = ((int) restDistance / 8) + 1;
-        return overCount * 100;
+        this.payment = paymentPolicy.applyPaymentPolicy(distance);
     }
 }

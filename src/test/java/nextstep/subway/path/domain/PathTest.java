@@ -1,14 +1,18 @@
 package nextstep.subway.path.domain;
 
+import nextstep.subway.common.SubwayErrorMessage;
+import nextstep.subway.exception.IllegalDistanceValueException;
 import nextstep.subway.station.Station;
 import nextstep.subway.station.StationFixtures;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class PathTest {
 
@@ -24,7 +28,7 @@ class PathTest {
         // when
         path.setPayment();
         // then
-        Assertions.assertThat(path.getPayment()).isEqualTo(1250);
+        assertThat(path.getPayment()).isEqualTo(1250);
     }
 
     @ParameterizedTest(name = "10km 초과 50km 이하의 거리는 5km 마다 추가요금 100원이 추가됩니다.")
@@ -46,7 +50,7 @@ class PathTest {
         // when
         path.setPayment();
         // then
-        Assertions.assertThat(path.getPayment()).isEqualTo(payment);
+        assertThat(path.getPayment()).isEqualTo(payment);
     }
 
     @ParameterizedTest(name = "50km 초과 거리는 8km 마다 추가요금 100원이 추가됩니다.")
@@ -61,6 +65,18 @@ class PathTest {
         // when
         path.setPayment();
         // then
-        Assertions.assertThat(path.getPayment()).isEqualTo(payment);
+        assertThat(path.getPayment()).isEqualTo(payment);
+    }
+
+    @DisplayName("잘못된 거리가 계산되면 에러가 발생합니다.")
+    @Test
+    void IllegalDistance() {
+        // given
+        Path path = new Path(defaultStation, 0, duration);
+        // when
+        // then
+        assertThatThrownBy(path::setPayment)
+                .isInstanceOf(IllegalDistanceValueException.class)
+                .hasMessage(SubwayErrorMessage.ILLEGAL_PATH_DISTANCE_VALUE.getMessage());
     }
 }

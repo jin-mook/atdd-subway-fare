@@ -10,6 +10,7 @@ public enum SubwayErrorMessage {
     NO_STATION_EXIST("해당하는 지하철 역 정보가 없습니다."),
     NOT_SAME_UP_AND_DOWN_STATION("구간 정보가 올바르지 않습니다."),
     ILLEGAL_DISTANCE_VALUE("거리 간격이 0 이하일 수 없습니다."),
+    ILLEGAL_PATH_DISTANCE_VALUE("잘못된 총 이용 거리 입니다."),
     ILLEGAL_DURATION_VALUE("소요 시간이 0 이하일 수 없습니다."),
     LARGE_DISTANCE_THAN_CURRENT_SECTION("기존 구간의 거리보다 클 수 없습니다."),
     LARGE_DURATION_THAN_CURRENT_SECTION("기존 구간의 소요시간 보다 클 수 없습니다."),
