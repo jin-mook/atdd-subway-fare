@@ -8,7 +8,6 @@ import nextstep.subway.line.dto.LineRequest;
 import nextstep.subway.line.dto.SectionRequest;
 import nextstep.subway.path.domain.PathType;
 import nextstep.subway.station.StationFixtures;
-import org.assertj.core.api.Assertions;
 import org.assertj.core.groups.Tuple;
 import org.springframework.http.HttpStatus;
 
@@ -16,6 +15,7 @@ import static nextstep.subway.line.LineAssuredTemplate.createLine;
 import static nextstep.subway.line.SectionAssuredTemplate.addSection;
 import static nextstep.subway.path.PathAssuredTemplate.searchShortestPath;
 import static nextstep.subway.station.StationAssuredTemplate.createStationWithId;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class PathStepDef implements En {
 
@@ -51,7 +51,7 @@ public class PathStepDef implements En {
         });
 
         Then("논현역부터 양재역까지의 거리가 가장 빠른 길의 역들과 총 거리, 소요 시간을 응답받습니다.", () -> {
-            Assertions.assertThat(response.jsonPath().getList("stations")).hasSize(4)
+            assertThat(response.jsonPath().getList("stations")).hasSize(4)
                     .extracting("id", "name")
                     .contains(
                             Tuple.tuple((int) 논현역_id, StationFixtures.논현역.getName()),
@@ -60,12 +60,12 @@ public class PathStepDef implements En {
                             Tuple.tuple((int) 양재역_id, StationFixtures.양재역.getName())
                     );
 
-            Assertions.assertThat(response.jsonPath().getLong("distance")).isEqualTo(25);
-            Assertions.assertThat(response.jsonPath().getLong("duration")).isEqualTo(45);
+            assertThat(response.jsonPath().getLong("distance")).isEqualTo(25);
+            assertThat(response.jsonPath().getLong("duration")).isEqualTo(45);
         });
 
         And("거리 기준 지하철 경로 조회에 이용 요금도 함께 응답합니다.", () -> {
-            Assertions.assertThat(response.jsonPath().getInt("payment")).isEqualTo(1650);
+            assertThat(response.jsonPath().getInt("payment")).isEqualTo(1650);
         });
 
         When("서로 연결되어 있지 않은 역의 최단거리를 요청합니다.", () -> {
@@ -75,8 +75,8 @@ public class PathStepDef implements En {
         });
 
         Then("연결되어 있지 않다는 에러 응답을 전달받습니다.", () -> {
-            Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
-            Assertions.assertThat(response.body().asString()).isEqualTo(SubwayErrorMessage.NOT_CONNECTED_STATION.getMessage());
+            assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+            assertThat(response.body().asString()).isEqualTo(SubwayErrorMessage.NOT_CONNECTED_STATION.getMessage());
         });
 
         When("존재하지 않은 역의 최단거리를 요청합니다.", () -> {
@@ -86,8 +86,8 @@ public class PathStepDef implements En {
         });
 
         Then("존재하지 않는 역이라는 에러 응답을 전달받습니다.", () -> {
-            Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
-            Assertions.assertThat(response.body().asString()).isEqualTo(SubwayErrorMessage.NO_STATION_EXIST.getMessage());
+            assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+            assertThat(response.body().asString()).isEqualTo(SubwayErrorMessage.NO_STATION_EXIST.getMessage());
         });
 
         When("논현역에서 양재역으로 갈 수 있는 길을 소요 시간 기준으로 조회합니다.", () -> {
@@ -96,7 +96,7 @@ public class PathStepDef implements En {
         });
 
         Then("논현역부터 양재역까지의 소요 시간이 가장 빠른 길의 역들과 총 거리, 소요 시간을 응답받습니다.", () -> {
-            Assertions.assertThat(response.jsonPath().getList("stations")).hasSize(3)
+            assertThat(response.jsonPath().getList("stations")).hasSize(3)
                     .extracting("id", "name")
                     .contains(
                             Tuple.tuple((int) 논현역_id, StationFixtures.논현역.getName()),
@@ -104,12 +104,12 @@ public class PathStepDef implements En {
                             Tuple.tuple((int) 양재역_id, StationFixtures.양재역.getName())
                     );
 
-            Assertions.assertThat(response.jsonPath().getLong("distance")).isEqualTo(30);
-            Assertions.assertThat(response.jsonPath().getLong("duration")).isEqualTo(30);
+            assertThat(response.jsonPath().getLong("distance")).isEqualTo(30);
+            assertThat(response.jsonPath().getLong("duration")).isEqualTo(30);
         });
 
         And("소요 시간 기준 지하철 경로 조회에 이용 요금도 함께 응답합니다.", () -> {
-            Assertions.assertThat(response.jsonPath().getInt("payment")).isEqualTo(1750);
+            assertThat(response.jsonPath().getInt("payment")).isEqualTo(1750);
         });
     }
 }
