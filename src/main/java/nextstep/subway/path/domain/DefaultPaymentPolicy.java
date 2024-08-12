@@ -1,9 +1,8 @@
 package nextstep.subway.path.domain;
 
-public class DefaultPaymentPolicy implements PaymentPolicy {
+import static nextstep.subway.path.domain.PaymentPolicyConstant.*;
 
-    private static final long DEFAULT_DISTANCE = 10;
-    private static final int DEFAULT_PAYMENT = 1250;
+public class DefaultPaymentPolicy implements PaymentPolicy {
 
     @Override
     public boolean check(long distance) {

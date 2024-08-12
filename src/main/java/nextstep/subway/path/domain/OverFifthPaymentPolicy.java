@@ -1,12 +1,8 @@
 package nextstep.subway.path.domain;
 
-public class OverFifthPaymentPolicy implements PaymentPolicy {
+import static nextstep.subway.path.domain.PaymentPolicyConstant.*;
 
-    private static final long DEFAULT_DISTANCE = 10;
-    private static final long OVER_FARE_DISTANCE = 50;
-    private static final int DEFAULT_PAYMENT = 1250;
-    private static final int DISTANCE_RATE = 8;
-    private static final int DEFAULT_DISTANCE_FEE = 100;
+public class OverFifthPaymentPolicy implements PaymentPolicy {
 
     @Override
     public boolean check(long distance) {
@@ -20,7 +16,7 @@ public class OverFifthPaymentPolicy implements PaymentPolicy {
 
     private int calculateOverTenFare(long distance) {
         long restDistance = distance - DEFAULT_DISTANCE;
-        int overCount = ((int) restDistance / DISTANCE_RATE) + 1;
+        int overCount = ((int) restDistance / OVER_FIFTH_DISTANCE_RATE) + 1;
         return overCount * DEFAULT_DISTANCE_FEE;
     }
 }
