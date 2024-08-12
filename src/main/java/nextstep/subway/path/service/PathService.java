@@ -34,7 +34,6 @@ public class PathService {
 
         SearchPathInfo searchPathInfo = new SearchPathInfo(sourceStation, targetStation, pathType);
         Path path = shortestPathService.findShortestPath(sections, searchPathInfo);
-        path.setPayment();
         return PathResponse.from(path);
     }
 }
