@@ -16,11 +16,13 @@ public class PathResponse {
     private List<LineStationsResponse> stations;
     private long distance;
     private long duration;
+    private int payment;
 
-    private PathResponse(List<LineStationsResponse> stations, long distance, long duration) {
+    private PathResponse(List<LineStationsResponse> stations, long distance, long duration, int payment) {
         this.stations = stations;
         this.distance = distance;
         this.duration = duration;
+        this.payment = payment;
     }
 
     public static PathResponse from(Path path) {
@@ -28,15 +30,6 @@ public class PathResponse {
                 .map(LineStationsResponse::new)
                 .collect(Collectors.toList());
 
-        return new PathResponse(stations, path.getDistance(), path.getDuration());
+        return new PathResponse(stations, path.getDistance(), path.getDuration(), path.getPayment());
     }
-
-//    public static PathResponse from(List<Section> sections, long distance) {
-//        List<LineStationsResponse> stations = sections.stream().flatMap(section -> Stream.of(section.getUpStation(), section.getDownStation()))
-//                .distinct()
-//                .map(LineStationsResponse::new)
-//                .collect(Collectors.toList());
-//
-//        return new PathResponse(stations, distance);
-//    }
 }
