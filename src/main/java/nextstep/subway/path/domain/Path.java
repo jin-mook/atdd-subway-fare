@@ -5,16 +5,9 @@ import nextstep.subway.station.Station;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 public class Path {
-
-    private static final Set<PaymentPolicy> policies = Set.of(
-            new DefaultPaymentPolicy(),
-            new UnderFifthPaymentPolicy(),
-            new OverFifthPaymentPolicy()
-    );
 
     private final List<Station> stations;
     private final long distance;

@@ -21,7 +21,7 @@ public class Payment {
         this.payment = setPayment(distance);
     }
 
-    public int setPayment(long distance) {
+    private int setPayment(long distance) {
         PaymentPolicy paymentPolicy = policies.stream().filter(policy -> policy.check(distance))
                 .findFirst()
                 .orElseThrow(() -> new IllegalDistanceValueException(SubwayErrorMessage.ILLEGAL_PATH_DISTANCE_VALUE));
