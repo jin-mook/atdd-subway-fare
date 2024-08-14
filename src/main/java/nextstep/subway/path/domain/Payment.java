@@ -3,6 +3,7 @@ package nextstep.subway.path.domain;
 import lombok.Getter;
 import nextstep.subway.common.SubwayErrorMessage;
 import nextstep.subway.exception.IllegalDistanceValueException;
+import nextstep.subway.line.domain.LineAdditionFee;
 
 import java.util.Set;
 
@@ -21,6 +22,10 @@ public class Payment {
         this.payment = setPayment(distance);
     }
 
+    private Payment(int payment) {
+        this.payment = payment;
+    }
+
     private int setPayment(long distance) {
         PaymentPolicy paymentPolicy = policies.stream().filter(policy -> policy.check(distance))
                 .findFirst()
@@ -31,5 +36,9 @@ public class Payment {
 
     public static Payment of(long distance) {
         return new Payment(distance);
+    }
+
+    public Payment addLineAdditionFee(LineAdditionFee lineAdditionFee) {
+        return new Payment(this.payment + lineAdditionFee.getAdditionFee());
     }
 }

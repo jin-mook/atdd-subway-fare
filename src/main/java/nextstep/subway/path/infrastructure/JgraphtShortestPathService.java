@@ -13,7 +13,6 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -22,6 +21,22 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 public class JgraphtShortestPathService implements ShortestPathService {
+
+//    @Override
+//    public Path findShortestPath(List<Section> sections, SearchPathInfo searchPathInfo) {
+//        DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath = initializeDijkstra(sections, searchPathInfo.getPathType());
+//
+//        try {
+//            GraphPath<Station, DefaultWeightedEdge> shortestPath = dijkstraShortestPath.getPath(
+//                    searchPathInfo.getSourceStation(),
+//                    searchPathInfo.getTargetStation());
+//
+//            Pair<Long, Long> distanceAndDuration = findShortestDistanceAndDuration(sections, shortestPath);
+//            return new Path(shortestPath.getVertexList(), distanceAndDuration.getFirst(), distanceAndDuration.getSecond());
+//        } catch (NullPointerException | IllegalArgumentException e) {
+//            throw new NotConnectedStationException(SubwayErrorMessage.NOT_CONNECTED_STATION);
+//        }
+//    }
 
     @Override
     public Path findShortestPath(List<Section> sections, SearchPathInfo searchPathInfo) {
@@ -32,23 +47,27 @@ public class JgraphtShortestPathService implements ShortestPathService {
                     searchPathInfo.getSourceStation(),
                     searchPathInfo.getTargetStation());
 
-            Pair<Long, Long> distanceAndDuration = findShortestDistanceAndDuration(sections, shortestPath);
-            return new Path(shortestPath.getVertexList(), distanceAndDuration.getFirst(), distanceAndDuration.getSecond());
+            List<Section> shortestSections = findShortestSections(sections, shortestPath);
+            return new Path(shortestSections, shortestPath.getVertexList());
+
+//            Pair<Long, Long> distanceAndDuration = findShortestDistanceAndDuration(sections, shortestPath);
+//            return new Path(shortestPath.getVertexList(), distanceAndDuration.getFirst(), distanceAndDuration.getSecond());
         } catch (NullPointerException | IllegalArgumentException e) {
             throw new NotConnectedStationException(SubwayErrorMessage.NOT_CONNECTED_STATION);
         }
     }
 
-    private Pair<Long, Long> findShortestDistanceAndDuration(List<Section> sections, GraphPath<Station, DefaultWeightedEdge> shortestPath) {
-        List<Section> shortestSections = findShortestSections(sections, shortestPath);
 
-        return shortestSections.stream()
-                .map(section -> Pair.of(section.getDistance(), section.getDuration()))
-                .reduce(Pair.of(0L, 0L), (subPair, currentPair) -> Pair.of(
-                        subPair.getFirst() + currentPair.getFirst(),
-                        subPair.getSecond() + currentPair.getSecond())
-                );
-    }
+//    private Pair<Long, Long> findShortestDistanceAndDuration(List<Section> sections, GraphPath<Station, DefaultWeightedEdge> shortestPath) {
+//        List<Section> shortestSections = findShortestSections(sections, shortestPath);
+//
+//        return shortestSections.stream()
+//                .map(section -> Pair.of(section.getDistance(), section.getDuration()))
+//                .reduce(Pair.of(0L, 0L), (subPair, currentPair) -> Pair.of(
+//                        subPair.getFirst() + currentPair.getFirst(),
+//                        subPair.getSecond() + currentPair.getSecond())
+//                );
+//    }
 
     private List<Section> findShortestSections(List<Section> sections, GraphPath<Station, DefaultWeightedEdge> shortestPath) {
         List<Station> vertexList = shortestPath.getVertexList();

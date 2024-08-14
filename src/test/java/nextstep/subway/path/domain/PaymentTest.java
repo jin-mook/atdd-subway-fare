@@ -2,6 +2,7 @@ package nextstep.subway.path.domain;
 
 import nextstep.subway.common.SubwayErrorMessage;
 import nextstep.subway.exception.IllegalDistanceValueException;
+import nextstep.subway.line.domain.LineAdditionFee;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,7 +21,7 @@ class PaymentTest {
         Payment payment = Payment.of(distance);
         // when
         // then
-        assertThat(payment.getPayment()).isEqualTo(1250);
+        assertThat(payment.getPayment()).isEqualTo(PaymentPolicyConstant.DEFAULT_PAYMENT);
     }
 
     @ParameterizedTest(name = "10km 초과 50km 이하의 거리는 5km 마다 추가요금 100원이 추가됩니다.")
@@ -69,4 +70,15 @@ class PaymentTest {
                 .hasMessage(SubwayErrorMessage.ILLEGAL_PATH_DISTANCE_VALUE.getMessage());
     }
 
+    @DisplayName("추가 요금이 있는 노선이 존재하는 경우 요금을 추가합니다.")
+    @Test
+    void addLineAdditionFee() {
+        // given
+        long distance = 10;
+        Payment payment = Payment.of(distance);
+        // when
+        Payment addedPayment = payment.addLineAdditionFee(new LineAdditionFee(900));
+        // then
+        assertThat(addedPayment.getPayment()).isEqualTo(2150);
+    }
 }

@@ -1,7 +1,10 @@
 package nextstep.subway.line.domain;
 
+import lombok.Getter;
+
 import javax.persistence.Embeddable;
 
+@Getter
 @Embeddable
 public class LineAdditionFee {
 
