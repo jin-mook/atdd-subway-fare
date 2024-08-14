@@ -27,10 +27,7 @@ public class Line {
     private Sections sections = new Sections();
 
     public Line(String name, String color, Section section) {
-        this.name = name;
-        this.color = color;
-
-        this.addSection(section);
+        this(name, color, section, 0);
     }
 
     public Line(String name, String color, Section section, int additionFee) {

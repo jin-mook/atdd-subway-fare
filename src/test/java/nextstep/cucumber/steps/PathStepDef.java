@@ -25,6 +25,10 @@ public class PathStepDef implements En {
     private long 고속터미널역_id;
     private long 교대역_id;
     private long 사당역_id;
+
+    private long 신분당선_id;
+    private long 삼호선_id;
+
     private ExtractableResponse<Response> response;
 
 
@@ -36,14 +40,19 @@ public class PathStepDef implements En {
             this.고속터미널역_id = createStationWithId(StationFixtures.고속터미널역.getName());
             this.교대역_id = createStationWithId(StationFixtures.교대역.getName());
             this.사당역_id = createStationWithId(StationFixtures.사당역.getName());
+        });
 
-            long 신분당선_id = createLine(new LineRequest("신분당선", "green", 논현역_id, 강남역_id, 10L, 10L)).then().extract().jsonPath().getLong("id");
+        And("노선을 등록할 때 신분당선은 추가요금 900원을 적용합니다.", () -> {
+            this.신분당선_id = createLine(new LineRequest("신분당선", "green", 논현역_id, 강남역_id, 10L, 10L)).then().extract().jsonPath().getLong("id");
             addSection(신분당선_id, new SectionRequest(강남역_id, 양재역_id, 20L, 20L));
+        });
 
-            long 삼호선_id = createLine(new LineRequest("3호선", "orange", 논현역_id, 고속터미널역_id, 10L, 20L)).then().extract().jsonPath().getLong("id");
+        And("노선을 등록할 때 삼호선은 추가요금 500원을 적용합니다.", () -> {
+            this.삼호선_id = createLine(new LineRequest("3호선", "orange", 논현역_id, 고속터미널역_id, 10L, 20L)).then().extract().jsonPath().getLong("id");
             addSection(삼호선_id, new SectionRequest(고속터미널역_id, 교대역_id, 10L, 15L));
             addSection(삼호선_id, new SectionRequest(교대역_id, 양재역_id, 5L, 10L));
         });
+
 
         When("논현역에서 양재역으로 갈 수 있는 길을 거리 기준으로 조회합니다.", () -> {
             this.response = searchShortestPath(논현역_id, 양재역_id, PathType.DISTANCE)
@@ -65,7 +74,8 @@ public class PathStepDef implements En {
         });
 
         And("거리 기준 지하철 경로 조회에 이용 요금도 함께 응답합니다.", () -> {
-            assertThat(response.jsonPath().getInt("payment")).isEqualTo(1650);
+//            assertThat(response.jsonPath().getInt("payment")).isEqualTo(1650);
+            assertThat(response.jsonPath().getInt("payment")).isEqualTo(2150);
         });
 
         When("서로 연결되어 있지 않은 역의 최단거리를 요청합니다.", () -> {
@@ -109,7 +119,8 @@ public class PathStepDef implements En {
         });
 
         And("소요 시간 기준 지하철 경로 조회에 이용 요금도 함께 응답합니다.", () -> {
-            assertThat(response.jsonPath().getInt("payment")).isEqualTo(1750);
+//            assertThat(response.jsonPath().getInt("payment")).isEqualTo(1750);
+            assertThat(response.jsonPath().getInt("payment")).isEqualTo(2650);
         });
     }
 }
