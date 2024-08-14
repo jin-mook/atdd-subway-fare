@@ -21,6 +21,9 @@ public class Line {
     private String color;
 
     @Embedded
+    private LineAdditionFee additionFee;
+
+    @Embedded
     private Sections sections = new Sections();
 
     public Line(String name, String color, Section section) {
@@ -28,6 +31,14 @@ public class Line {
         this.color = color;
 
         this.addSection(section);
+    }
+
+    public Line(String name, String color, Section section, int additionFee) {
+        this.name = name;
+        this.color = color;
+
+        this.addSection(section);
+        this.additionFee = new LineAdditionFee(additionFee);
     }
 
     public void addSection(Section section) {
