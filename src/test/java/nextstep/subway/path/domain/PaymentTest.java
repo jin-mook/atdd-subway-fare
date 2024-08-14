@@ -17,7 +17,7 @@ class PaymentTest {
     void basic() {
         // given
         long distance = 10;
-        Payment payment = new Payment(distance);
+        Payment payment = Payment.of(distance);
         // when
         // then
         assertThat(payment.getPayment()).isEqualTo(1250);
@@ -39,7 +39,7 @@ class PaymentTest {
     void tenDistanceOver(long distance, int paymentResult) {
         // given
         // when
-        Payment payment = new Payment(distance);
+        Payment payment = Payment.of(distance);
         // then
         assertThat(payment.getPayment()).isEqualTo(paymentResult);
     }
@@ -53,7 +53,7 @@ class PaymentTest {
     void fifthDistanceOver(long distance, int paymentResult) {
         // given
         // when
-        Payment payment = new Payment(distance);
+        Payment payment = Payment.of(distance);
         // then
         assertThat(payment.getPayment()).isEqualTo(paymentResult);
     }
@@ -64,7 +64,7 @@ class PaymentTest {
         // given
         // when
         // then
-        assertThatThrownBy(() -> new Payment(0))
+        assertThatThrownBy(() -> Payment.of(0))
                 .isInstanceOf(IllegalDistanceValueException.class)
                 .hasMessage(SubwayErrorMessage.ILLEGAL_PATH_DISTANCE_VALUE.getMessage());
     }

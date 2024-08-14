@@ -18,7 +18,7 @@ public class Path {
         this.stations = stations;
         this.distance = distance;
         this.duration = duration;
-        this.payment = new Payment(distance);
+        this.payment = Payment.of(distance);
     }
 
     public List<Station> getStations() {

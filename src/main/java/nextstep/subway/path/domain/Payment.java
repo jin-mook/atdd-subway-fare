@@ -17,7 +17,7 @@ public class Payment {
 
     private final int payment;
 
-    public Payment(long distance) {
+    private Payment(long distance) {
         this.payment = setPayment(distance);
     }
 
@@ -27,5 +27,9 @@ public class Payment {
                 .orElseThrow(() -> new IllegalDistanceValueException(SubwayErrorMessage.ILLEGAL_PATH_DISTANCE_VALUE));
 
         return paymentPolicy.applyPaymentPolicy(distance);
+    }
+
+    public static Payment of(long distance) {
+        return new Payment(distance);
     }
 }
