@@ -3,9 +3,12 @@ package nextstep.cucumber.steps;
 import io.cucumber.java8.En;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.member.acceptance.OauthAssuredTemplate;
+import nextstep.member.acceptance.test.GithubUser;
 import nextstep.subway.common.SubwayErrorMessage;
 import nextstep.subway.line.dto.LineRequest;
 import nextstep.subway.line.dto.SectionRequest;
+import nextstep.subway.path.PathAssuredTemplate;
 import nextstep.subway.path.domain.PathType;
 import nextstep.subway.station.StationFixtures;
 import org.assertj.core.groups.Tuple;
@@ -13,7 +16,7 @@ import org.springframework.http.HttpStatus;
 
 import static nextstep.subway.line.LineAssuredTemplate.createLine;
 import static nextstep.subway.line.SectionAssuredTemplate.addSection;
-import static nextstep.subway.path.PathAssuredTemplate.searchShortestPath;
+import static nextstep.subway.path.PathAssuredTemplate.로그인_없이_경로_조회;
 import static nextstep.subway.station.StationAssuredTemplate.createStationWithId;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,6 +31,8 @@ public class PathStepDef implements En {
 
     private long 신분당선_id;
     private long 삼호선_id;
+
+    private String accessToken;
 
     private ExtractableResponse<Response> response;
 
@@ -55,7 +60,7 @@ public class PathStepDef implements En {
 
 
         When("논현역에서 양재역으로 갈 수 있는 길을 거리 기준으로 조회합니다.", () -> {
-            this.response = searchShortestPath(논현역_id, 양재역_id, PathType.DISTANCE)
+            this.response = 로그인_없이_경로_조회(논현역_id, 양재역_id, PathType.DISTANCE)
                     .then().log().all().extract();
         });
 
@@ -79,7 +84,7 @@ public class PathStepDef implements En {
         });
 
         When("서로 연결되어 있지 않은 역의 최단거리를 요청합니다.", () -> {
-            response = searchShortestPath(사당역_id, 양재역_id, PathType.DISTANCE)
+            response = 로그인_없이_경로_조회(사당역_id, 양재역_id, PathType.DISTANCE)
                     .then().log().all()
                     .extract();
         });
@@ -90,7 +95,7 @@ public class PathStepDef implements En {
         });
 
         When("존재하지 않은 역의 최단거리를 요청합니다.", () -> {
-            response = searchShortestPath(Long.MAX_VALUE, 양재역_id, PathType.DISTANCE)
+            response = 로그인_없이_경로_조회(Long.MAX_VALUE, 양재역_id, PathType.DISTANCE)
                     .then().log().all()
                     .extract();
         });
@@ -101,7 +106,7 @@ public class PathStepDef implements En {
         });
 
         When("논현역에서 양재역으로 갈 수 있는 길을 소요 시간 기준으로 조회합니다.", () -> {
-            response = searchShortestPath(논현역_id, 양재역_id, PathType.DURATION)
+            response = 로그인_없이_경로_조회(논현역_id, 양재역_id, PathType.DURATION)
                     .then().log().all().extract();
         });
 
@@ -121,6 +126,26 @@ public class PathStepDef implements En {
         And("소요 시간 기준 지하철 경로 조회에 이용 요금도 함께 응답합니다.", () -> {
 //            assertThat(response.jsonPath().getInt("payment")).isEqualTo(1750);
             assertThat(response.jsonPath().getInt("payment")).isEqualTo(2650);
+        });
+
+        Given("{int} 살 사용자가 로그인 합니다.", (Integer age) -> {
+            GithubUser githubUser = GithubUser.findUserByAge(age);
+            this.accessToken = OauthAssuredTemplate.깃허브로그인(githubUser.getCode())
+                    .then().extract().jsonPath().getString("accessToken");
+        });
+
+        When("로그인 토큰과 함께 논현역에서 양재역으로 갈 수 있는 길을 거리 기준으로 조회합니다.", () -> {
+            response = PathAssuredTemplate.로그인_이후_경로_조회(논현역_id, 양재역_id, PathType.DISTANCE, accessToken)
+                    .then().log().all().extract();
+        });
+
+        When("로그인 토큰과 함께 논현역에서 양재역으로 갈 수 있는 길을 소요 시간 기준으로 조회합니다.", () -> {
+            response = PathAssuredTemplate.로그인_이후_경로_조회(논현역_id, 양재역_id, PathType.DURATION, accessToken)
+                    .then().log().all().extract();
+        });
+
+        And("나이 기준으로 최종 이용 요금인 {int} 가격도 함께 응답합니다.", (Integer payment) -> {
+            assertThat(response.jsonPath().getInt("payment")).isEqualTo(payment);
         });
     }
 }

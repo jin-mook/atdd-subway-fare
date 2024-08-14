@@ -53,7 +53,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     void shortest() {
         // given
         // when
-        ExtractableResponse<Response> result = PathAssuredTemplate.searchShortestPath(논현역_id, 양재역_id, PathType.DISTANCE)
+        ExtractableResponse<Response> result = PathAssuredTemplate.로그인_없이_경로_조회(논현역_id, 양재역_id, PathType.DISTANCE)
                 .then().log().all()
                 .extract();
 
@@ -81,7 +81,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         // given
         long 사당역_id = createStationWithId(StationFixtures.사당역.getName());
         // when
-        ExtractableResponse<Response> result = PathAssuredTemplate.searchShortestPath(사당역_id, 양재역_id, PathType.DISTANCE)
+        ExtractableResponse<Response> result = PathAssuredTemplate.로그인_없이_경로_조회(사당역_id, 양재역_id, PathType.DISTANCE)
                 .then().log().all()
                 .extract();
         // then
@@ -99,7 +99,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     void noStation() {
         // given
         // when
-        ExtractableResponse<Response> result = PathAssuredTemplate.searchShortestPath(Long.MAX_VALUE, 양재역_id, PathType.DISTANCE)
+        ExtractableResponse<Response> result = PathAssuredTemplate.로그인_없이_경로_조회(Long.MAX_VALUE, 양재역_id, PathType.DISTANCE)
                 .then().log().all()
                 .extract();
         // then
