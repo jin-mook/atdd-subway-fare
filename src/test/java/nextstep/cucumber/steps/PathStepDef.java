@@ -79,7 +79,6 @@ public class PathStepDef implements En {
         });
 
         And("거리 기준 지하철 경로 조회에 이용 요금도 함께 응답합니다.", () -> {
-//            assertThat(response.jsonPath().getInt("payment")).isEqualTo(1650);
             assertThat(response.jsonPath().getInt("payment")).isEqualTo(2150);
         });
 
@@ -124,7 +123,6 @@ public class PathStepDef implements En {
         });
 
         And("소요 시간 기준 지하철 경로 조회에 이용 요금도 함께 응답합니다.", () -> {
-//            assertThat(response.jsonPath().getInt("payment")).isEqualTo(1750);
             assertThat(response.jsonPath().getInt("payment")).isEqualTo(2650);
         });
 

@@ -1,6 +1,6 @@
-package nextstep.subway.path.domain;
+package nextstep.subway.path.domain.distancepolicy;
 
-public class PaymentPolicyConstant {
+public class DistancePaymentPolicyConstant {
 
     public static final int DEFAULT_DISTANCE_FEE = 100;
     public static final int DEFAULT_PAYMENT = 1250;

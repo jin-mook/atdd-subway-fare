@@ -1,6 +1,6 @@
 package nextstep.subway.path.domain.distancepolicy;
 
-import static nextstep.subway.path.domain.PaymentPolicyConstant.*;
+import static nextstep.subway.path.domain.distancepolicy.DistancePaymentPolicyConstant.*;
 
 public class DefaultDistancePaymentPolicy implements DistancePaymentPolicy {
 
