@@ -33,7 +33,7 @@ public class PathController {
         if (loginMember instanceof NotLoginMember) {
             data = pathService.findShortestPath(sourceStationId, targetStationId, pathType);
         } else {
-            data = null;
+            data = pathService.findShortestPathWithMember(sourceStationId, targetStationId, pathType, loginMember);
         }
 
         return SuccessResponse.ok(data);

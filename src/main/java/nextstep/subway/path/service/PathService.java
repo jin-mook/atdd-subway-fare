@@ -47,7 +47,7 @@ public class PathService {
                                          PathType pathType,
                                          LoginMember loginMember) {
         Path path = findPath(sourceStationId, targetStationId, pathType);
-
+        path.applyMemberAgeFee(loginMember.getAge());
 
         return PathResponse.from(path);
     }

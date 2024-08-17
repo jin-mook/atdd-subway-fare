@@ -17,7 +17,7 @@ public class Path {
     private final List<Station> stations;
     private final long distance;
     private final long duration;
-    private final Payment payment;
+    private Payment payment;
 
     public Path(List<Station> stations, long distance, long duration) {
         this.stations = stations;
@@ -38,9 +38,8 @@ public class Path {
         this.payment = Payment.of(distance).addLineAdditionFee(getMaxLineAdditionFee());
     }
 
-    public Path applyMemberAgeFee(int age) {
-
-        return null;
+    public void applyMemberAgeFee(int age) {
+        this.payment = payment.applyMemberAgeFee(age);
     }
 
     private Pair<Long, Long> findShortestDistanceAndDuration(List<Section> sections) {

@@ -48,12 +48,12 @@ public class PathStepDef implements En {
         });
 
         And("노선을 등록할 때 신분당선은 추가요금 900원을 적용합니다.", () -> {
-            this.신분당선_id = createLine(new LineRequest("신분당선", "green", 논현역_id, 강남역_id, 10L, 10L)).then().extract().jsonPath().getLong("id");
+            this.신분당선_id = createLine(new LineRequest("신분당선", "green", 논현역_id, 강남역_id, 10L, 10L, 900)).then().extract().jsonPath().getLong("id");
             addSection(신분당선_id, new SectionRequest(강남역_id, 양재역_id, 20L, 20L));
         });
 
         And("노선을 등록할 때 삼호선은 추가요금 500원을 적용합니다.", () -> {
-            this.삼호선_id = createLine(new LineRequest("3호선", "orange", 논현역_id, 고속터미널역_id, 10L, 20L)).then().extract().jsonPath().getLong("id");
+            this.삼호선_id = createLine(new LineRequest("3호선", "orange", 논현역_id, 고속터미널역_id, 10L, 20L, 500)).then().extract().jsonPath().getLong("id");
             addSection(삼호선_id, new SectionRequest(고속터미널역_id, 교대역_id, 10L, 15L));
             addSection(삼호선_id, new SectionRequest(교대역_id, 양재역_id, 5L, 10L));
         });
