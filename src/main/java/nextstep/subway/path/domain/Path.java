@@ -38,6 +38,11 @@ public class Path {
         this.payment = Payment.of(distance).addLineAdditionFee(getMaxLineAdditionFee());
     }
 
+    public Path applyMemberAgeFee(int age) {
+
+        return null;
+    }
+
     private Pair<Long, Long> findShortestDistanceAndDuration(List<Section> sections) {
         return sections.stream()
                 .map(section -> Pair.of(section.getDistance(), section.getDuration()))

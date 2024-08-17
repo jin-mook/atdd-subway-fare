@@ -1,8 +1,8 @@
-package nextstep.subway.path.domain;
+package nextstep.subway.path.domain.distancepolicy;
 
 import static nextstep.subway.path.domain.PaymentPolicyConstant.*;
 
-public class DefaultPaymentPolicy implements PaymentPolicy {
+public class DefaultDistancePaymentPolicy implements DistancePaymentPolicy {
 
     @Override
     public boolean check(long distance) {

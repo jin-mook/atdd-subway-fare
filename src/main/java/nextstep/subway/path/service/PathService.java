@@ -1,6 +1,7 @@
 package nextstep.subway.path.service;
 
 import lombok.RequiredArgsConstructor;
+import nextstep.member.domain.LoginMember;
 import nextstep.subway.line.domain.LineRepository;
 import nextstep.subway.line.domain.Section;
 import nextstep.subway.path.domain.Path;
@@ -24,6 +25,11 @@ public class PathService {
     private final StationService stationService;
 
     public PathResponse findShortestPath(Long sourceStationId, Long targetStationId, PathType pathType) {
+        Path path = findPath(sourceStationId, targetStationId, pathType);
+        return PathResponse.from(path);
+    }
+
+    private Path findPath(Long sourceStationId, Long targetStationId, PathType pathType) {
         Station sourceStation = stationService.findById(sourceStationId);
         Station targetStation = stationService.findById(targetStationId);
 
@@ -33,7 +39,16 @@ public class PathService {
                 .collect(Collectors.toList());
 
         SearchPathInfo searchPathInfo = new SearchPathInfo(sourceStation, targetStation, pathType);
-        Path path = shortestPathService.findShortestPath(sections, searchPathInfo);
+        return shortestPathService.findShortestPath(sections, searchPathInfo);
+    }
+
+    public PathResponse findShortestPathWithMember(Long sourceStationId, 
+                                         Long targetStationId,
+                                         PathType pathType,
+                                         LoginMember loginMember) {
+        Path path = findPath(sourceStationId, targetStationId, pathType);
+
+
         return PathResponse.from(path);
     }
 }

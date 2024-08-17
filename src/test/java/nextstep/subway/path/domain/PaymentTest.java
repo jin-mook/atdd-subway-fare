@@ -81,4 +81,35 @@ class PaymentTest {
         // then
         assertThat(addedPayment.getPayment()).isEqualTo(2150);
     }
+
+    @ParameterizedTest(name = "청소년인 경우 요금 계산")
+    @CsvSource({
+            "13, 1070",
+            "18, 1070",
+            "19, 1250"
+    })
+    void youngBoy(int age, int paymentResult) {
+        // given
+        long distance = 10;
+        Payment payment = Payment.of(distance);
+        // when
+        Payment addedPayment = payment.applyMemberAgeFee(age);
+        // then
+        assertThat(addedPayment.getPayment()).isEqualTo(paymentResult);
+    }
+
+    @ParameterizedTest(name = "어린이인 경우 요금 계산")
+    @CsvSource({
+            "6, 800",
+            "12, 800",
+    })
+    void child(int age, int paymentResult) {
+        // given
+        long distance = 10;
+        Payment payment = Payment.of(distance);
+        // when
+        Payment addedPayment = payment.applyMemberAgeFee(age);
+        // then
+        assertThat(addedPayment.getPayment()).isEqualTo(paymentResult);
+    }
 }
