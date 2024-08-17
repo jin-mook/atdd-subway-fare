@@ -24,7 +24,7 @@ class PathTest {
         Section 이호선구간 = Section.firstSection(사당역, 강남역, 36L, 20L);
 
         new Line("신분당선", "red", 신분당구간, 900);
-        new Line("2호선", "green", 이호선구간);
+        new Line("2호선", "green", 이호선구간, 500);
         // when
         Path path = new Path(List.of(신분당구간, 이호선구간), List.of(사당역, 강남역, 양재역));
         // then

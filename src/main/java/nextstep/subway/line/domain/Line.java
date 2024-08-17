@@ -26,10 +26,6 @@ public class Line {
     @Embedded
     private Sections sections = new Sections();
 
-    public Line(String name, String color, Section section) {
-        this(name, color, section, 0);
-    }
-
     public Line(String name, String color, Section section, int additionFee) {
         this.name = name;
         this.color = color;

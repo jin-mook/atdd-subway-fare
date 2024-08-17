@@ -32,7 +32,7 @@ public class LineServiceMockTest {
     void addSection() {
         // given
         // lineRepository, stationService stub 설정을 통해 초기값 셋팅
-        Line line = new Line("name", "color", SectionFixtures.FIRST_SECTION);
+        Line line = new Line("name", "color", SectionFixtures.FIRST_SECTION, 0);
         Mockito.doReturn(Optional.of(line)).when(lineRepository).findByIdWithSectionsAndStations(1L);
         Mockito.doReturn(StationFixtures.FIRST_DOWN_STATION).when(stationService).findById(2L);
         Mockito.doReturn(StationFixtures.SECOND_UP_STATION).when(stationService).findById(3L);

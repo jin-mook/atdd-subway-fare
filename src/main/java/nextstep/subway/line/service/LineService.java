@@ -32,7 +32,7 @@ public class LineService {
         Station downStation = stationService.findById(lineRequest.getDownStationId());
 
         Section section = Section.firstSection(upStation, downStation, lineRequest.getDistance(), lineRequest.getDuration());
-        Line line = new Line(lineRequest.getName(), lineRequest.getColor(), section);
+        Line line = new Line(lineRequest.getName(), lineRequest.getColor(), section, lineRequest.getAdditionalFee());
         Line savedLine = lineRepository.save(line);
 
         return LineResponse.from(savedLine);
