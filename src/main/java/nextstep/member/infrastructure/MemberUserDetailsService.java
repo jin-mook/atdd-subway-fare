@@ -17,12 +17,12 @@ public class MemberUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadByUserEmail(String email, int age) {
         Member member = memberService.findMemberByUserResource(email, age);
-        return new LoginMember(member.getId(), member.getEmail(), member.getPassword());
+        return new LoginMember(member.getId(), member.getEmail(), member.getPassword(), member.getAge());
     }
 
     @Override
     public UserDetails loadByUserEmail(String email) {
         Member member = memberService.findMemberByEmail(email);
-        return new LoginMember(member.getId(), member.getEmail(), member.getPassword());
+        return new LoginMember(member.getId(), member.getEmail(), member.getPassword(), member.getAge());
     }
 }

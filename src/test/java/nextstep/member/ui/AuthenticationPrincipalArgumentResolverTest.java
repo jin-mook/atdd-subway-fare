@@ -6,7 +6,7 @@ import nextstep.auth.domain.UserDetailsService;
 import nextstep.auth.exception.AuthenticationException;
 import nextstep.auth.ui.AuthenticationPrincipalArgumentResolver;
 import nextstep.member.domain.LoginMember;
-import org.assertj.core.api.Assertions;
+import nextstep.member.domain.NotLoginMember;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +19,9 @@ import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.ModelAndViewContainer;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(MockitoExtension.class)
 class AuthenticationPrincipalArgumentResolverTest {
@@ -48,13 +51,13 @@ class AuthenticationPrincipalArgumentResolverTest {
         Mockito.doReturn(bearer).when(nativeWebRequest).getHeader("Authorization");
         Mockito.doReturn(true).when(jwtTokenProvider).validateToken(token);
         Mockito.doReturn(email).when(jwtTokenProvider).getPrincipal(token);
-        Mockito.doReturn(new LoginMember(1L, email, password)).when(userDetailsService).loadByUserEmail(email);
+        Mockito.doReturn(new LoginMember(1L, email, password, 10)).when(userDetailsService).loadByUserEmail(email);
 
         // when
         UserDetails loginMember = (UserDetails) argumentResolver.resolveArgument(methodParameter, modelAndViewContainer, nativeWebRequest, binderFactory);
         // then
-        Assertions.assertThat(loginMember.getId()).isEqualTo(1L);
-        Assertions.assertThat(loginMember.getEmail()).isEqualTo(email);
+        assertThat(loginMember.getId()).isEqualTo(1L);
+        assertThat(loginMember.getEmail()).isEqualTo(email);
     }
 
     @DisplayName("토큰 정보가 없으면 인증 에러가 발생합니다.")
@@ -64,9 +67,9 @@ class AuthenticationPrincipalArgumentResolverTest {
         AuthenticationPrincipalArgumentResolver argumentResolver = new AuthenticationPrincipalArgumentResolver(jwtTokenProvider, userDetailsService);
         Mockito.doReturn(null).when(nativeWebRequest).getHeader("Authorization");
         // when
+        Object result = argumentResolver.resolveArgument(methodParameter, modelAndViewContainer, nativeWebRequest, binderFactory);
         // then
-        Assertions.assertThatThrownBy(() -> argumentResolver.resolveArgument(methodParameter, modelAndViewContainer, nativeWebRequest, binderFactory))
-                .isInstanceOf(AuthenticationException.class);
+        assertThat(result).isInstanceOf(NotLoginMember.class);
     }
 
     @DisplayName("Bearer 토큰이 아닌 Basic 토큰이라면 인증 에러가 발생합니다.")
@@ -78,7 +81,7 @@ class AuthenticationPrincipalArgumentResolverTest {
         Mockito.doReturn(basic).when(nativeWebRequest).getHeader("Authorization");
         // when
         // then
-        Assertions.assertThatThrownBy(() -> argumentResolver.resolveArgument(methodParameter, modelAndViewContainer, nativeWebRequest, binderFactory))
+        assertThatThrownBy(() -> argumentResolver.resolveArgument(methodParameter, modelAndViewContainer, nativeWebRequest, binderFactory))
                 .isInstanceOf(AuthenticationException.class);
     }
 
@@ -91,7 +94,7 @@ class AuthenticationPrincipalArgumentResolverTest {
         Mockito.doReturn(bearer).when(nativeWebRequest).getHeader("Authorization");
         // when
         // then
-        Assertions.assertThatThrownBy(() -> argumentResolver.resolveArgument(methodParameter, modelAndViewContainer, nativeWebRequest, binderFactory))
+        assertThatThrownBy(() -> argumentResolver.resolveArgument(methodParameter, modelAndViewContainer, nativeWebRequest, binderFactory))
                 .isInstanceOf(AuthenticationException.class);
     }
 
@@ -105,7 +108,7 @@ class AuthenticationPrincipalArgumentResolverTest {
         AuthenticationPrincipalArgumentResolver argumentResolver = new AuthenticationPrincipalArgumentResolver(jwtTokenProvider, userDetailsService);
         // when
         // then
-        Assertions.assertThatThrownBy(() -> argumentResolver.resolveArgument(methodParameter, modelAndViewContainer, nativeWebRequest, binderFactory))
+        assertThatThrownBy(() -> argumentResolver.resolveArgument(methodParameter, modelAndViewContainer, nativeWebRequest, binderFactory))
                 .isInstanceOf(AuthenticationException.class);
     }
 }
