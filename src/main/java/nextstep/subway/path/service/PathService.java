@@ -29,6 +29,16 @@ public class PathService {
         return PathResponse.from(path);
     }
 
+    public PathResponse findShortestPathWithMember(Long sourceStationId, 
+                                         Long targetStationId,
+                                         PathType pathType,
+                                         LoginMember loginMember) {
+        Path path = findPath(sourceStationId, targetStationId, pathType);
+        path.applyMemberAgeFee(loginMember.getAge());
+
+        return PathResponse.from(path);
+    }
+
     private Path findPath(Long sourceStationId, Long targetStationId, PathType pathType) {
         Station sourceStation = stationService.findById(sourceStationId);
         Station targetStation = stationService.findById(targetStationId);
@@ -40,15 +50,5 @@ public class PathService {
 
         SearchPathInfo searchPathInfo = new SearchPathInfo(sourceStation, targetStation, pathType);
         return shortestPathService.findShortestPath(sections, searchPathInfo);
-    }
-
-    public PathResponse findShortestPathWithMember(Long sourceStationId, 
-                                         Long targetStationId,
-                                         PathType pathType,
-                                         LoginMember loginMember) {
-        Path path = findPath(sourceStationId, targetStationId, pathType);
-        path.applyMemberAgeFee(loginMember.getAge());
-
-        return PathResponse.from(path);
     }
 }
