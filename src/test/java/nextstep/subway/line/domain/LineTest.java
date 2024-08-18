@@ -15,7 +15,7 @@ class LineTest {
     @DisplayName("노선의 이름을 수정합니다.")
     void updateLineName() {
         // given
-        Line line = new Line("기존 이름", "기존 색", SectionFixtures.FIRST_SECTION);
+        Line line = new Line("기존 이름", "기존 색", SectionFixtures.FIRST_SECTION, 0);
         String newName = "새로운 이름";
         // when
         line.updateName(newName);
@@ -27,7 +27,7 @@ class LineTest {
     @DisplayName("노선의 색을 수정합니다.")
     void updateLineColor() {
         // given
-        Line line = new Line("기존 이름", "기존 색", SectionFixtures.FIRST_SECTION);
+        Line line = new Line("기존 이름", "기존 색", SectionFixtures.FIRST_SECTION, 0);
         String newColor = "새로운 색";
         // when
         line.updateColor(newColor);
@@ -39,7 +39,7 @@ class LineTest {
     @Test
     void notExistStationSection() {
         // given
-        Line line = new Line("기존 이름", "기존 색", SectionFixtures.FIRST_SECTION);
+        Line line = new Line("기존 이름", "기존 색", SectionFixtures.FIRST_SECTION, 0);
         line.addSection(SectionFixtures.ADD_FIRST_SECTION);
         // when
         // then
@@ -52,7 +52,7 @@ class LineTest {
     @Test
     void addSection() {
         // given
-        Line line = new Line("기존 이름", "기존 색", SectionFixtures.FIRST_SECTION);
+        Line line = new Line("기존 이름", "기존 색", SectionFixtures.FIRST_SECTION, 0);
         line.addSection(SectionFixtures.ADD_FIRST_SECTION);
         // when
         line.addSection(SectionFixtures.SECOND_SECTION);
@@ -69,7 +69,7 @@ class LineTest {
     @Test
     void canNotDeleteSectionMiddle() {
         // given
-        Line line = new Line("기존 이름", "기존 색", SectionFixtures.FIRST_SECTION);
+        Line line = new Line("기존 이름", "기존 색", SectionFixtures.FIRST_SECTION, 0);
         line.addSection(SectionFixtures.ADD_FIRST_SECTION);
         line.addSection(SectionFixtures.SECOND_SECTION);
         // when
@@ -97,7 +97,7 @@ class LineTest {
     @Test
     void deleteSection() {
         // given
-        Line line = new Line("기존 이름", "기존 색", SectionFixtures.FIRST_SECTION);
+        Line line = new Line("기존 이름", "기존 색", SectionFixtures.FIRST_SECTION, 0);
         line.addSection(SectionFixtures.ADD_FIRST_SECTION);
         line.addSection(SectionFixtures.SECOND_SECTION);
         // when

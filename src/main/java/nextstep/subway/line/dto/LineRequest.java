@@ -29,6 +29,9 @@ public class LineRequest {
     @NotNull
     private long duration;
 
+    @NotNull
+    private int additionalFee;
+
     public LineRequest(String name, String color, long upStationId, long downStationId, long distance, long duration) {
         this.name = name;
         this.color = color;
@@ -36,5 +39,15 @@ public class LineRequest {
         this.downStationId = downStationId;
         this.distance = distance;
         this.duration = duration;
+    }
+
+    public LineRequest(String name, String color, long upStationId, long downStationId, long distance, long duration, int additionalFee) {
+        this.name = name;
+        this.color = color;
+        this.upStationId = upStationId;
+        this.downStationId = downStationId;
+        this.distance = distance;
+        this.duration = duration;
+        this.additionalFee = additionalFee;
     }
 }

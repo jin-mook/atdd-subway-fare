@@ -129,4 +129,8 @@ public class Section {
     public boolean isRightSection(Station upStation, Station downStation) {
         return this.upStation.equals(upStation) && this.downStation.equals(downStation);
     }
+
+    public LineAdditionFee getLineAdditionFee() {
+        return this.line.getAdditionFee();
+    }
 }

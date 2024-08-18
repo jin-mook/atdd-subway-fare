@@ -8,11 +8,13 @@ public class LoginMember implements UserDetails {
     private final Long id;
     private final String email;
     private final String password;
+    private final int age;
 
-    public LoginMember(Long id, String email, String password) {
+    public LoginMember(Long id, String email, String password, int age) {
         this.id = id;
         this.email = email;
         this.password = password;
+        this.age = age;
     }
 
     @Override
@@ -28,6 +30,11 @@ public class LoginMember implements UserDetails {
     @Override
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public int getAge() {
+        return this.age;
     }
 
     @Override

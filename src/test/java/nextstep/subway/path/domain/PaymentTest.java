@@ -2,6 +2,8 @@ package nextstep.subway.path.domain;
 
 import nextstep.subway.common.SubwayErrorMessage;
 import nextstep.subway.exception.IllegalDistanceValueException;
+import nextstep.subway.line.domain.LineAdditionFee;
+import nextstep.subway.path.domain.distancepolicy.DistancePaymentPolicyConstant;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,10 +19,10 @@ class PaymentTest {
     void basic() {
         // given
         long distance = 10;
-        Payment payment = new Payment(distance);
+        Payment payment = Payment.of(distance);
         // when
         // then
-        assertThat(payment.getPayment()).isEqualTo(1250);
+        assertThat(payment.getPayment()).isEqualTo(DistancePaymentPolicyConstant.DEFAULT_PAYMENT);
     }
 
     @ParameterizedTest(name = "10km 초과 50km 이하의 거리는 5km 마다 추가요금 100원이 추가됩니다.")
@@ -39,7 +41,7 @@ class PaymentTest {
     void tenDistanceOver(long distance, int paymentResult) {
         // given
         // when
-        Payment payment = new Payment(distance);
+        Payment payment = Payment.of(distance);
         // then
         assertThat(payment.getPayment()).isEqualTo(paymentResult);
     }
@@ -53,7 +55,7 @@ class PaymentTest {
     void fifthDistanceOver(long distance, int paymentResult) {
         // given
         // when
-        Payment payment = new Payment(distance);
+        Payment payment = Payment.of(distance);
         // then
         assertThat(payment.getPayment()).isEqualTo(paymentResult);
     }
@@ -64,9 +66,51 @@ class PaymentTest {
         // given
         // when
         // then
-        assertThatThrownBy(() -> new Payment(0))
+        assertThatThrownBy(() -> Payment.of(0))
                 .isInstanceOf(IllegalDistanceValueException.class)
                 .hasMessage(SubwayErrorMessage.ILLEGAL_PATH_DISTANCE_VALUE.getMessage());
     }
 
+    @DisplayName("추가 요금이 있는 노선이 존재하는 경우 요금을 추가합니다.")
+    @Test
+    void addLineAdditionFee() {
+        // given
+        long distance = 10;
+        Payment payment = Payment.of(distance);
+        // when
+        Payment addedPayment = payment.addLineAdditionFee(new LineAdditionFee(900));
+        // then
+        assertThat(addedPayment.getPayment()).isEqualTo(2150);
+    }
+
+    @ParameterizedTest(name = "청소년인 경우 요금 계산")
+    @CsvSource({
+            "13, 1070",
+            "18, 1070",
+            "19, 1250"
+    })
+    void youngBoy(int age, int paymentResult) {
+        // given
+        long distance = 10;
+        Payment payment = Payment.of(distance);
+        // when
+        Payment addedPayment = payment.applyMemberAgeFee(age);
+        // then
+        assertThat(addedPayment.getPayment()).isEqualTo(paymentResult);
+    }
+
+    @ParameterizedTest(name = "어린이인 경우 요금 계산")
+    @CsvSource({
+            "6, 800",
+            "12, 800",
+    })
+    void child(int age, int paymentResult) {
+        // given
+        long distance = 10;
+        Payment payment = Payment.of(distance);
+        // when
+        Payment addedPayment = payment.applyMemberAgeFee(age);
+        // then
+        assertThat(addedPayment.getPayment()).isEqualTo(paymentResult);
+    }
 }

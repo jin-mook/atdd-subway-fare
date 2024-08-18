@@ -14,7 +14,7 @@ class LineTest {
 
     @BeforeEach
     void setUp() {
-        this.line = new Line("2호선", "green", SectionFixtures.FIRST_SECTION);
+        this.line = new Line("2호선", "green", SectionFixtures.FIRST_SECTION, 0);
     }
 
     @Test
